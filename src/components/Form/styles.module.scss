@@ -1,0 +1,58 @@
+.form_wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.form__input {
+  width: 100%;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  transition: all 0.4s linear;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #b0bec5;
+  }
+
+  &:focus,
+  &:focus-within {
+    outline: none;
+    border: 1px solid #5e35b1;
+    & ~ button {
+      background: #5e35b1;
+      svg {
+        fill: #fff;
+      }
+    }
+  }
+}
+
+.form__button {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 0px 15px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  transition: all 0.4s linear;
+
+  &:hover,
+  &:focus {
+    background: #5e35b1;
+    svg {
+      fill: #fff;
+    }
+  }
+
+  &:hover {
+    background: #5e35b18c;
+    svg {
+      fill: #fff;
+    }
+  }
+}

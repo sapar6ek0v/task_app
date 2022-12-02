@@ -1,0 +1,49 @@
+.layout_wrapper {
+  display: flex;
+  gap: 40px;
+}
+
+.navbar__wrapper {
+  width: 30vw;
+}
+
+.navbar__ul {
+  width: 20%;
+  height: 100%;
+  background-color: #f1f1f1;
+  position: fixed;
+  overflow: auto;
+  margin: 0;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.navbar__li {
+  padding: 15px 20px;
+  background: #d6e4e5;
+  color: #807777;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: all 0.4s linear;
+  cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: #73777b;
+    color: #f9f9f9;
+  }
+}
+
+.active {
+  background: #73777b;
+  color: #f9f9f9;
+}
+
+.content_wrapper {
+  width: 70vw;
+  height: 100%;
+  padding: 40px 40px 40px 0;
+}
