@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -23,4 +23,4 @@ const CustomCheckbox: FC<Props> = ({ isCompleted, toggle }) => {
   );
 };
 
-export default CustomCheckbox;
+export default memo(CustomCheckbox);

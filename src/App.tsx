@@ -1,25 +1,19 @@
-import { FC } from 'react';
-import Form from './components/Form';
+import { FC, useState } from 'react';
 import Layout from './components/Layout';
-import IconLoader from './components/Loader';
-import TodoList from './components/TodoList';
-import { useGetAllTodosQuery } from './store';
-import './index.scss';
+import { CategoriesContext } from './context/categories';
+import Main from './pages/Main';
+import { useGetAllCategoriesQuery } from './store';
 
 const App: FC = () => {
-  const { data: todos, isLoading } = useGetAllTodosQuery();
+  const { data: categories } = useGetAllCategoriesQuery();
+  const [currentCategory, setCurrentCategory] = useState<string>(categories?.[0].id || '1');
 
   return (
-    <Layout>
-      <Form />
-      <div className='appLoader_wrapper'>
-        {
-          (!isLoading && !!todos)
-            ? <TodoList todos={todos} />
-            : <IconLoader />
-        }
-      </div>
-    </Layout>
+    <CategoriesContext.Provider value={{ currentCategory, setCurrentCategory }}>
+      <Layout>
+        <Main />
+      </Layout>
+    </CategoriesContext.Provider>
   );
 };
 

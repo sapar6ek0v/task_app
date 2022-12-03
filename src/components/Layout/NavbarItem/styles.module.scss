@@ -1,0 +1,58 @@
+.navbar__li {
+  padding: 15px 20px;
+  min-height: 26px;
+  background: rgb(234, 237, 238);
+  color: #807777;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: all 0.4s linear;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: #73777b;
+    color: #f9f9f9;
+  }
+
+  span {
+    word-break: break-all;
+  }
+}
+
+.active {
+  background: #73777b;
+  color: #f9f9f9;
+}
+
+.navbar_deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 5px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgb(217, 217, 217);
+  transition: background-color 0.4s linear;
+  cursor: pointer;
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    outline: none;
+    background-color: rgba(217, 217, 217, 0.452);
+  }
+
+  &:active {
+    background-color: rgba(217, 217, 217, 0.205);
+  }
+
+  &:disabled {
+    background-color: rgba(128, 16, 16, 0.753);
+    cursor: not-allowed;
+  }
+}

@@ -5,11 +5,12 @@
 
 .navbar__wrapper {
   width: 30vw;
+  position: relative;
 }
 
 .navbar__ul {
   width: 20%;
-  height: 100%;
+  height: calc(100% - 80px);
   background-color: #f1f1f1;
   position: fixed;
   overflow: auto;
@@ -20,28 +21,6 @@
   gap: 20px;
 }
 
-.navbar__li {
-  padding: 15px 20px;
-  background: #d6e4e5;
-  color: #807777;
-  font-weight: 500;
-  border-radius: 12px;
-  transition: all 0.4s linear;
-  cursor: pointer;
-
-  &:hover,
-  &:active,
-  &:focus {
-    background: #73777b;
-    color: #f9f9f9;
-  }
-}
-
-.active {
-  background: #73777b;
-  color: #f9f9f9;
-}
-
 .content_wrapper {
   width: 70vw;
   min-height: calc(100vh - 80px);
@@ -49,4 +28,47 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+}
+
+.navbar__form {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.navbar__input {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 24px;
+  font-style: italic;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid #494949d2;
+  transition: all 0.4s linear;
+  padding-right: 20px;
+
+  &::placeholder {
+    color: #b0bec5;
+  }
+
+  &:focus,
+  &:focus-within,
+  &:hover {
+    outline: none;
+    border-bottom: 1px solid #5e35b18c;
+    & ~ span {
+      color: #5e35b18c;
+    }
+  }
+}
+
+.navbar__inputPlus {
+  position: absolute;
+  font-size: 25px;
+  font-weight: 500;
+  font-style: italic;
+  color: #b0bec5;
+  right: 0;
 }

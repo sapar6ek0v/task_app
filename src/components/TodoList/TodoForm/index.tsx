@@ -28,7 +28,14 @@ const TodoForm: FC<Props> = ({ onSubmit, defaultValues, isLoading }) => {
     event.preventDefault();
     if (!defaultValues?.id || !todo) return;
     try {
-      await onSubmit({ id: defaultValues.id, todo, isCompleted });
+      const value: TodoFormValue = {
+        id: defaultValues.id,
+        todo,
+        isCompleted,
+        categoryId: defaultValues.categoryId,
+      };
+
+      await onSubmit(value);
     } catch (error) {
       console.log(error);
     }

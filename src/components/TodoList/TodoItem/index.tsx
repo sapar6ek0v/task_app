@@ -1,9 +1,11 @@
 import { FC, useState } from 'react';
 import { Edit, TrashX } from 'tabler-icons-react';
-import { useChangeStatusMutation, useDeleteTodoMutation } from '../../../store';
+import { useChangeStatusMutation, useDeleteTodoMutation, useGetSingleCategoryQuery } from '../../../store';
+import { useCategories } from '../../../context/categories';
 import { Todo } from '../../../store/types';
 import CustomCheckbox from '../../CustomCheckbox';
 import IconLoader from '../../Loader';
+import Highlighter from '../../Highlighter';
 import TodoUpdateModal from '../TodoUpdateModal';
 import styles from '../styles.module.scss';
 
@@ -12,16 +14,19 @@ type Props = {
 };
 
 const TodoItem: FC<Props> = ({ todo }) => {
+  const { currentCategory: categoryId } = useCategories();
+
   const [isCompleted, setIsCompleted] = useState<boolean>(todo.isCompleted);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   const [deleteTodo, { isLoading: isDeleteLoading }] = useDeleteTodoMutation();
   const [changeStatus] = useChangeStatusMutation();
+  const { data: category } = useGetSingleCategoryQuery(categoryId);
 
   const handleChangeStatus = async () => {
     setIsCompleted(!isCompleted);
     try {
-      await changeStatus({ id: todo.id, isCompleted });
+      await changeStatus({ id: todo.id, isCompleted, categoryId });
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +34,7 @@ const TodoItem: FC<Props> = ({ todo }) => {
 
   const handleDeleteTodo = async () => {
     try {
-      await deleteTodo(todo.id);
+      await deleteTodo({ id: todo.id, categoryId });
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +56,7 @@ const TodoItem: FC<Props> = ({ todo }) => {
           <h3
             className={isCompleted ? `${styles.todo_title_checked} ${styles.todo_title}` : styles.todo_title}
           >
-            {todo.todo}
+            {category ? <Highlighter text={todo.todo} highlight={category.name} /> : todo.todo}
           </h3>
         </div>
 

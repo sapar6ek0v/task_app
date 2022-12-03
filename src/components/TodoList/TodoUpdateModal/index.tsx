@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+import { useCategories } from '../../../context/categories';
 import { useGetSingleTodoQuery, useUpdateTodoMutation } from '../../../store';
 import { TodoFormValue } from '../../../store/types';
 import IconLoader from '../../Loader';
@@ -13,20 +14,22 @@ type Props = {
 };
 
 const TodoUpdateModal: FC<Props> = ({ isOpen, onClose, todoId }) => {
-  const { data: todo, isLoading } = useGetSingleTodoQuery(todoId);
+  const { currentCategory: categoryId } = useCategories();
+  const { data: todo, isLoading } = useGetSingleTodoQuery({ id: todoId, categoryId });
   const [updateTodo, { isLoading: isUpdateLoading }] = useUpdateTodoMutation();
 
   const defaultValues = useMemo(() => {
     if (todo) {
       const defaultFormValue: TodoFormValue = {
         id: todo.id,
+        categoryId,
         isCompleted: todo.isCompleted,
         todo: todo.todo,
       };
 
       return defaultFormValue;
     }
-  }, [todo])
+  }, [todo, categoryId])
 
   const handleSubmit = async (value: TodoFormValue) => {
     try {

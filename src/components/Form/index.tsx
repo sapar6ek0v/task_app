@@ -1,13 +1,28 @@
 import { ChangeEvent, FC, FormEvent, KeyboardEvent, useState } from 'react';
 import { Plus } from 'tabler-icons-react';
-import { useCreateTodoMutation } from '../../store';
+import { useCategories } from '../../context/categories';
+import { useCreateCategoryMutation, useCreateTodoMutation } from '../../store';
 import IconLoader from '../Loader';
 import styles from './styles.module.scss';
 
 const Form: FC = () => {
   const [todo, setTodo] = useState<string>('');
 
+  const { currentCategory: categoryId } = useCategories();
+
   const [createTodo, { isLoading }] = useCreateTodoMutation();
+  const [createCategory] = useCreateCategoryMutation();
+
+  const handleCreateCategory = async () => {
+    const isTodoHasCategoryWord = todo.split(' ').filter((item) => item.startsWith('#'));
+    if (isTodoHasCategoryWord.length) {
+      const newCategory = isTodoHasCategoryWord[0].replace('#', '');
+      const response = await createCategory({ name: newCategory }).unwrap();
+      await createTodo({ todo, categoryId: response.id, isCompleted: false });
+    } else {
+      await createTodo({ todo, categoryId, isCompleted: false });
+    }
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -15,7 +30,7 @@ const Form: FC = () => {
     if (!todo) return;
 
     try {
-      await createTodo({ todo, isCompleted: false });
+      await handleCreateCategory();
     } catch (error) {
       console.log(error)
     }
