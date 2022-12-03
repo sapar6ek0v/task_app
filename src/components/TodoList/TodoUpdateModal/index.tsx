@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 import { useCategories } from '../../../context/categories';
 import { useGetSingleTodoQuery, useUpdateTodoMutation } from '../../../store';
 import { TodoFormValue } from '../../../store/types';
+import ErrorNotification from '../../ErrorNotification';
 import IconLoader from '../../Loader';
 import Modal from '../../Modal';
 import TodoForm from '../TodoForm';
@@ -36,7 +37,7 @@ const TodoUpdateModal: FC<Props> = ({ isOpen, onClose, todoId }) => {
       await updateTodo(value);
       onClose();
     } catch (error) {
-      console.log(error);
+      return <ErrorNotification message={error} />;
     }
   };
 

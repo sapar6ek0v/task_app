@@ -1,5 +1,7 @@
 import { ChangeEvent, FC, KeyboardEvent, ReactNode, useState } from 'react';
 import { useCreateCategoryMutation, useGetAllCategoriesQuery } from '../../store';
+import ErrorNotification from '../ErrorNotification';
+import IconLoader from '../Loader';
 import NavbarItem from './NavbarItem';
 import styles from './styles.module.scss';
 
@@ -21,6 +23,12 @@ const Layout: FC<Props> = ({ children }) => {
   const handleOnKeyDown = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (!category) return;
 
+    const isHasDuplicate = categories?.find((item) => item.name === category);
+    if (isHasDuplicate) {
+      setCategory('');
+      return <ErrorNotification message='Категория с таким именем уже существует!' />;
+    }
+
     if (event.key === 'Enter') {
       await createCategory({ name: category });
       setCategory('');
@@ -36,20 +44,24 @@ const Layout: FC<Props> = ({ children }) => {
               ? categories.map((category) => (
                 <NavbarItem key={category.id} category={category} />
               ))
-              : null
+              : <IconLoader />
           }
 
-          <div className={styles.navbar__form}>
-            <input
-              value={isCategoryLoading ? 'Создание...' : category}
-              onChange={handleOnChange}
-              onKeyDown={handleOnKeyDown}
-              className={styles.navbar__input}
-              type='text'
-              placeholder='Создать категорию...'
-            />
-            <span className={styles.navbar__inputPlus}>+</span>
-          </div>
+          {
+            (!isLoading) ?
+              <div className={styles.navbar__form}>
+                <input
+                  value={isCategoryLoading ? 'Создание...' : category}
+                  onChange={handleOnChange}
+                  onKeyDown={handleOnKeyDown}
+                  className={styles.navbar__input}
+                  type='text'
+                  placeholder='Создать категорию...'
+                />
+                <span className={styles.navbar__inputPlus}>+</span>
+              </div>
+              : null
+          }
         </ul>
       </nav>
       <div className={styles.content_wrapper}>{children}</div>

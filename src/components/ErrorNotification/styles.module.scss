@@ -1,0 +1,82 @@
+.notification_wrapper {
+  display: block;
+  font-size: 14px;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  transition: transform 0.6s ease-in;
+  animation: from-right 0.7s;
+
+  @keyframes from-right {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.notification {
+  position: relative;
+  width: 250px;
+  max-height: 50px;
+  padding: 14px;
+  margin-bottom: 15px;
+  background: #dc3535;
+  transition: 0.3s ease;
+  pointer-events: auto;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 0 10px #999;
+  color: #000;
+  opacity: 0.9;
+  background-position: 15px;
+  background-repeat: no-repeat;
+
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
+
+.notification_button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.notification_group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.notification_stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notification_title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.notification_message {
+  font-size: 14px;
+  line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,8 +1,9 @@
 import { ChangeEvent, FC, FormEvent, KeyboardEvent, useState } from 'react';
 import { Plus } from 'tabler-icons-react';
 import { useCategories } from '../../context/categories';
-import { useCreateCategoryMutation, useCreateTodoMutation } from '../../store';
+import { useCreateCategoryMutation, useCreateTodoMutation, useGetAllCategoriesQuery } from '../../store';
 import IconLoader from '../Loader';
+import ErrorNotification from '../ErrorNotification';
 import styles from './styles.module.scss';
 
 const Form: FC = () => {
@@ -12,9 +13,24 @@ const Form: FC = () => {
 
   const [createTodo, { isLoading }] = useCreateTodoMutation();
   const [createCategory] = useCreateCategoryMutation();
+  const { data: categories } = useGetAllCategoriesQuery();
+
+  const handleCheckForDuplicate = (isTodoHasCategoryWord: string[]) => {
+    if (isTodoHasCategoryWord.length && categories) {
+      const todoHasCategory = isTodoHasCategoryWord[0].replace('#', '');
+      const isHasDuplicate = categories.find((item) => item.name === todoHasCategory);
+
+      return !!isHasDuplicate;
+    }
+  };
 
   const handleCreateCategory = async () => {
     const isTodoHasCategoryWord = todo.split(' ').filter((item) => item.startsWith('#'));
+
+    if (handleCheckForDuplicate(isTodoHasCategoryWord)) {
+      return <ErrorNotification message='Категория с таким именем уже существует!' />;
+    }
+
     if (isTodoHasCategoryWord.length) {
       const newCategory = isTodoHasCategoryWord[0].replace('#', '');
       const response = await createCategory({ name: newCategory }).unwrap();
@@ -32,7 +48,7 @@ const Form: FC = () => {
     try {
       await handleCreateCategory();
     } catch (error) {
-      console.log(error)
+      return <ErrorNotification message={error} />;
     }
     setTodo('');
   };

@@ -39,6 +39,7 @@
   background-color: rgb(217, 217, 217);
   transition: background-color 0.4s linear;
   cursor: pointer;
+  position: relative;
 
   &:hover,
   &:focus,
@@ -52,7 +53,7 @@
   }
 
   &:disabled {
-    background-color: rgba(128, 16, 16, 0.753);
+    background-color: rgba(217, 217, 217, 0.205);
     cursor: not-allowed;
   }
 }

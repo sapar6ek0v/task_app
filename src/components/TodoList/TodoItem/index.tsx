@@ -8,6 +8,7 @@ import IconLoader from '../../Loader';
 import Highlighter from '../../Highlighter';
 import TodoUpdateModal from '../TodoUpdateModal';
 import styles from '../styles.module.scss';
+import ErrorNotification from '../../ErrorNotification';
 
 type Props = {
   todo: Todo;
@@ -28,7 +29,7 @@ const TodoItem: FC<Props> = ({ todo }) => {
     try {
       await changeStatus({ id: todo.id, isCompleted, categoryId });
     } catch (error) {
-      console.log(error);
+      return <ErrorNotification message={error} />;
     }
   };
 
@@ -36,7 +37,7 @@ const TodoItem: FC<Props> = ({ todo }) => {
     try {
       await deleteTodo({ id: todo.id, categoryId });
     } catch (error) {
-      console.log(error);
+      return <ErrorNotification message={error} />;
     }
   };
 

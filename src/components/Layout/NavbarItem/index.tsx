@@ -3,6 +3,8 @@ import { TrashX } from 'tabler-icons-react';
 import { useCategories } from '../../../context/categories';
 import { useDeleteCategoryMutation } from '../../../store';
 import { Category } from '../../../store/types';
+import ErrorNotification from '../../ErrorNotification';
+import IconLoader from '../../Loader';
 import styles from './styles.module.scss';
 
 type Props = {
@@ -23,7 +25,7 @@ const NavbarItem: FC<Props> = ({ category }) => {
     try {
       await deleteCategory(category.id);
     } catch (error) {
-      console.log(error);
+      return <ErrorNotification message={error} />;
     }
   };
 
@@ -45,7 +47,11 @@ const NavbarItem: FC<Props> = ({ category }) => {
             className={styles.navbar_deleteButton}
             disabled={isDeleteLoading}
           >
-            <TrashX size={18} strokeWidth={2} color={'#000'} />
+            {
+              isDeleteLoading
+                ? <IconLoader size={18} color={'#000'} />
+                : <TrashX size={18} strokeWidth={2} color={'#000'} />
+            }
           </button>
           : null
       }

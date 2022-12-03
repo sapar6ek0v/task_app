@@ -2,13 +2,14 @@ import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { Asterisk } from 'tabler-icons-react';
 import { TodoFormValue } from '../../../store/types';
 import CustomCheckbox from '../../CustomCheckbox';
+import ErrorNotification from '../../ErrorNotification';
 import IconLoader from '../../Loader';
 import styles from './styles.module.scss';
 
 type Props = {
   defaultValues?: TodoFormValue;
   isLoading: boolean;
-  onSubmit: (value: TodoFormValue) => Promise<void>;
+  onSubmit: (value: TodoFormValue) => Promise<JSX.Element | undefined>;
 };
 
 const TodoForm: FC<Props> = ({ onSubmit, defaultValues, isLoading }) => {
@@ -37,7 +38,7 @@ const TodoForm: FC<Props> = ({ onSubmit, defaultValues, isLoading }) => {
 
       await onSubmit(value);
     } catch (error) {
-      console.log(error);
+      return <ErrorNotification message={error} />;
     }
   };
 
