@@ -1,0 +1,59 @@
+.checkbox_label {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.checkbox_input {
+  display: none;
+}
+
+.checkbox_div {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 10px;
+  background: rgb(217, 217, 217);
+  transition: 0.25s ease;
+  transition-property: transform background-color;
+  position: relative;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    height: 3px;
+    width: 6px;
+    border-radius: 2px;
+    border-bottom: 4px solid white;
+    border-left: 4px solid white;
+    opacity: 0;
+    transform: rotate(-45deg) scale(0);
+    transition: 0.25s ease;
+    transition-property: transform opacity;
+  }
+}
+
+.checked {
+  position: relative;
+  background: rgb(0, 0, 0);
+  animation: taskBounce 0.25s ease forwards;
+
+  @keyframes taskBounce {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.95);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  &::before {
+    content: '';
+    opacity: 1;
+    transform: rotate(-45deg);
+  }
+}
