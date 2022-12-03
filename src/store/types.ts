@@ -6,6 +6,12 @@ export type Todo = {
 };
 
 export type TodoFormValue = {
+  id: string;
   todo: string;
+  isCompleted: boolean;
+};
+
+export type UpdateStatusTodoValue = {
+  id: string;
   isCompleted: boolean;
 };

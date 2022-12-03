@@ -1,0 +1,116 @@
+.todoList_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.todo_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background-color: rgb(255, 255, 255);
+  transition: 0.25s ease;
+  transition-property: background-color opacity transform;
+  animation: taskSlideDown 0.25s ease;
+  gap: 30px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+  @keyframes taskSlideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+}
+
+.todo_rightSide {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: fit-content;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.todo_leftSide {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  gap: 10px;
+}
+
+.todo_title {
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  word-break: break-word;
+  white-space: normal;
+  color: rgb(0, 0, 0);
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    width: 0%;
+    height: 2px;
+    border-radius: 1px;
+    background-color: rgb(0, 0, 0);
+    transition: width 0.25s ease 0.25s;
+  }
+}
+
+.todo_title_checked {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+  }
+}
+
+.todo_button {
+  position: relative;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.25s ease 0s;
+
+  &[disabled] {
+    background-color: transparent;
+    cursor: not-allowed;
+  }
+
+  &:hover,
+  &:active {
+    &:not([disabled]) {
+      outline: none;
+      background-color: rgb(217, 217, 217);
+    }
+  }
+}

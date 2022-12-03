@@ -1,6 +1,7 @@
 .form_wrapper {
   display: flex;
   align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .form__input {
@@ -9,7 +10,6 @@
   line-height: 20px;
   padding: 10px 15px;
   border: 1px solid transparent;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   transition: all 0.4s linear;
   box-sizing: border-box;
 
@@ -20,12 +20,9 @@
   &:focus,
   &:focus-within {
     outline: none;
-    border: 1px solid #5e35b1;
+    border: 1px solid #5e35b18c;
     & ~ button {
-      background: #5e35b1;
-      svg {
-        fill: #fff;
-      }
+      background: #5e35b18c;
     }
   }
 }
@@ -37,22 +34,25 @@
   line-height: 20px;
   padding: 0px 15px;
   height: 42px;
+  width: 52px;
   display: flex;
+  justify-content: center;
   align-items: center;
   transition: all 0.4s linear;
+  position: relative;
+  cursor: pointer;
 
   &:hover,
+  &:focus-within,
   &:focus {
-    background: #5e35b1;
-    svg {
-      fill: #fff;
-    }
+    background: #5e35b18c;
   }
 
-  &:hover {
-    background: #5e35b18c;
-    svg {
-      fill: #fff;
-    }
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover {
+    background: transparent;
   }
 }
