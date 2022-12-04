@@ -5,20 +5,22 @@ import styles from './styles.module.scss';
 type Props = {
   autoDeleteTime?: number;
   message?: any;
+  onClose: () => void;
 };
 
-const ErrorNotification: FC<Props> = ({ autoDeleteTime = 5000, message }) => {
+const ErrorNotification: FC<Props> = ({ autoDeleteTime = 5000, message, onClose }) => {
   const [isShowTime, setIsShowTime] = useState<boolean>(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsShowTime(false);
+      onClose();
     }, autoDeleteTime);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [autoDeleteTime]);
+  }, [autoDeleteTime, onClose]);
 
   const handleClose = () => {
     setIsShowTime(false);

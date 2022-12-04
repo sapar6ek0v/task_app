@@ -19,6 +19,8 @@ const TodoItem: FC<Props> = ({ todo }) => {
 
   const [isCompleted, setIsCompleted] = useState<boolean>(todo.isCompleted);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [isChangeStatusError, setIsChangeStatusError] = useState<any | null>(null);
+  const [isDeleteError, setIsDeleteError] = useState<any | null>(null);
 
   const [deleteTodo, { isLoading: isDeleteLoading }] = useDeleteTodoMutation();
   const [changeStatus] = useChangeStatusMutation();
@@ -29,7 +31,8 @@ const TodoItem: FC<Props> = ({ todo }) => {
     try {
       await changeStatus({ id: todo.id, isCompleted, categoryId });
     } catch (error) {
-      return <ErrorNotification message={error} />;
+      setIsChangeStatusError(error);
+      return;
     }
   };
 
@@ -37,7 +40,8 @@ const TodoItem: FC<Props> = ({ todo }) => {
     try {
       await deleteTodo({ id: todo.id, categoryId });
     } catch (error) {
-      return <ErrorNotification message={error} />;
+      setIsDeleteError(error);
+      return;
     }
   };
 
@@ -47,6 +51,14 @@ const TodoItem: FC<Props> = ({ todo }) => {
 
   const handleCloseUpdateModal = () => {
     setIsUpdate(false);
+  };
+
+  const handleCloseChangeStatusErrorNotification = () => {
+    setIsChangeStatusError(null);
+  };
+
+  const handleCloseDeleteErrorNotification = () => {
+    setIsDeleteError(null);
   };
 
   return (
@@ -79,6 +91,20 @@ const TodoItem: FC<Props> = ({ todo }) => {
         </div>
       </li>
       <TodoUpdateModal todoId={todo.id} isOpen={isUpdate} onClose={handleCloseUpdateModal} />
+      {
+        !!isChangeStatusError &&
+        <ErrorNotification
+          message={isChangeStatusError}
+          onClose={handleCloseDeleteErrorNotification}
+        />
+      }
+      {
+        !!isDeleteError &&
+        <ErrorNotification
+          message={isDeleteError}
+          onClose={handleCloseChangeStatusErrorNotification}
+        />
+      }
     </>
   );
 };

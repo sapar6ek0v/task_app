@@ -14,6 +14,7 @@ const Layout: FC<Props> = ({ children }) => {
   const [createCategory, { isLoading: isCategoryLoading }] = useCreateCategoryMutation();
 
   const [category, setCategory] = useState<string>('');
+  const [errorHasCategoryDuplicate, setErrorHasCategoryDuplicate] = useState<boolean>(false);
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -25,8 +26,9 @@ const Layout: FC<Props> = ({ children }) => {
 
     const isHasDuplicate = categories?.find((item) => item.name === category);
     if (isHasDuplicate) {
+      setErrorHasCategoryDuplicate(true);
       setCategory('');
-      return <ErrorNotification message='Категория с таким именем уже существует!' />;
+      return;
     }
 
     if (event.key === 'Enter') {
@@ -35,37 +37,51 @@ const Layout: FC<Props> = ({ children }) => {
     }
   };
 
-  return (
-    <div className={styles.layout_wrapper}>
-      <nav className={styles.navbar__wrapper}>
-        <ul className={styles.navbar__ul}>
-          {
-            (!isLoading && !!categories)
-              ? categories.map((category) => (
-                <NavbarItem key={category.id} category={category} />
-              ))
-              : <IconLoader />
-          }
 
-          {
-            (!isLoading) ?
-              <div className={styles.navbar__form}>
-                <input
-                  value={isCategoryLoading ? 'Создание...' : category}
-                  onChange={handleOnChange}
-                  onKeyDown={handleOnKeyDown}
-                  className={styles.navbar__input}
-                  type='text'
-                  placeholder='Создать категорию...'
-                />
-                <span className={styles.navbar__inputPlus}>+</span>
-              </div>
-              : null
-          }
-        </ul>
-      </nav>
-      <div className={styles.content_wrapper}>{children}</div>
-    </div>
+  const handleCloseDuplicateErrorNotification = () => {
+    setErrorHasCategoryDuplicate(false);
+  };
+
+  return (
+    <>
+      <div className={styles.layout_wrapper}>
+        <nav className={styles.navbar__wrapper}>
+          <ul className={styles.navbar__ul}>
+            {
+              (!isLoading && !!categories)
+                ? categories.map((category) => (
+                  <NavbarItem key={category.id} category={category} />
+                ))
+                : <IconLoader />
+            }
+
+            {
+              (!isLoading) ?
+                <div className={styles.navbar__form}>
+                  <input
+                    value={isCategoryLoading ? 'Создание...' : category}
+                    onChange={handleOnChange}
+                    onKeyDown={handleOnKeyDown}
+                    className={styles.navbar__input}
+                    type='text'
+                    placeholder='Создать категорию...'
+                  />
+                  <span className={styles.navbar__inputPlus}>+</span>
+                </div>
+                : null
+            }
+          </ul>
+        </nav>
+        <div className={styles.content_wrapper}>{children}</div>
+      </div>
+      {
+        !!errorHasCategoryDuplicate &&
+        <ErrorNotification
+          message='Категория с таким именем уже существует!'
+          onClose={handleCloseDuplicateErrorNotification}
+        />
+      }
+    </>
   );
 };
 

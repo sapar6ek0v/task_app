@@ -1,4 +1,4 @@
-import { FC, MouseEvent } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 import { TrashX } from 'tabler-icons-react';
 import { useCategories } from '../../../context/categories';
 import { useDeleteCategoryMutation } from '../../../store';
@@ -12,9 +12,10 @@ type Props = {
 };
 
 const NavbarItem: FC<Props> = ({ category }) => {
+  const [isDeleteError, setIsDeleteError] = useState<any | null>(null);
   const { currentCategory: categoryId, setCurrentCategory } = useCategories();
-
   const [deleteCategory, { isLoading: isDeleteLoading }] = useDeleteCategoryMutation();
+
 
   const handleChangeCurrentCategory = (category: string) => {
     setCurrentCategory(category);
@@ -25,37 +26,51 @@ const NavbarItem: FC<Props> = ({ category }) => {
     try {
       await deleteCategory(category.id);
     } catch (error) {
-      return <ErrorNotification message={error} />;
+      setIsDeleteError(error);
+      return;
     }
   };
 
+  const handleCloseDeleteErrorNotification = () => {
+    setIsDeleteError(null);
+  };
+
   return (
-    <li
-      className={
-        categoryId === category.id
-          ? `${styles.navbar__li} ${styles.active}`
-          : styles.navbar__li
-      }
-      onClick={() => handleChangeCurrentCategory(category.id)}
-    >
-      <span>{category.name}</span>
+    <>
+      <li
+        className={
+          categoryId === category.id
+            ? `${styles.navbar__li} ${styles.active}`
+            : styles.navbar__li
+        }
+        onClick={() => handleChangeCurrentCategory(category.id)}
+      >
+        <span>{category.name}</span>
+        {
+          category.id !== '1'
+            ?
+            <button
+              onClick={handleDeleteCategory}
+              className={styles.navbar_deleteButton}
+              disabled={isDeleteLoading}
+            >
+              {
+                isDeleteLoading
+                  ? <IconLoader size={18} color={'#000'} />
+                  : <TrashX size={18} strokeWidth={2} color={'#000'} />
+              }
+            </button>
+            : null
+        }
+      </li>
       {
-        category.id !== '1'
-          ?
-          <button
-            onClick={handleDeleteCategory}
-            className={styles.navbar_deleteButton}
-            disabled={isDeleteLoading}
-          >
-            {
-              isDeleteLoading
-                ? <IconLoader size={18} color={'#000'} />
-                : <TrashX size={18} strokeWidth={2} color={'#000'} />
-            }
-          </button>
-          : null
+        !!isDeleteError &&
+        <ErrorNotification
+          message={isDeleteError}
+          onClose={handleCloseDeleteErrorNotification}
+        />
       }
-    </li>
+    </>
   );
 };
 

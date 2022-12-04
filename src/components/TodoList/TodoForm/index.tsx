@@ -9,12 +9,13 @@ import styles from './styles.module.scss';
 type Props = {
   defaultValues?: TodoFormValue;
   isLoading: boolean;
-  onSubmit: (value: TodoFormValue) => Promise<JSX.Element | undefined>;
+  onSubmit: (value: TodoFormValue) => Promise<void>;
 };
 
 const TodoForm: FC<Props> = ({ onSubmit, defaultValues, isLoading }) => {
   const [isCompleted, setIsCompleted] = useState<boolean>(defaultValues?.isCompleted || false);
   const [todo, setTodo] = useState<string>(defaultValues?.todo || '');
+  const [isSubmitError, setIsSubmitError] = useState<any | null>(null);
 
   const toggleCompleted = () => {
     setIsCompleted(!isCompleted);
@@ -38,42 +39,56 @@ const TodoForm: FC<Props> = ({ onSubmit, defaultValues, isLoading }) => {
 
       await onSubmit(value);
     } catch (error) {
-      return <ErrorNotification message={error} />;
+      setIsSubmitError(error);
+      return;
     }
   };
 
+  const handleCloseSubmitErrorNotification = () => {
+    setIsSubmitError(null);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className={styles.form_wrapper}>
-      <h5 className={styles.form_title}>Обновить Todo</h5>
-      <div>
-        <label className={styles.form_label} htmlFor='todo'>
-          <span>Todo</span>
-          <Asterisk size={10} strokeWidth={2} color={'red'} />
-        </label>
-        <input
-          value={todo}
-          onChange={handleOnChange}
-          type='text'
-          className={styles.form_input}
-          id='todo'
+    <>
+      <form onSubmit={handleSubmit} className={styles.form_wrapper}>
+        <h5 className={styles.form_title}>Обновить Todo</h5>
+        <div>
+          <label className={styles.form_label} htmlFor='todo'>
+            <span>Todo</span>
+            <Asterisk size={10} strokeWidth={2} color={'red'} />
+          </label>
+          <input
+            value={todo}
+            onChange={handleOnChange}
+            type='text'
+            className={styles.form_input}
+            id='todo'
+          />
+        </div>
+        <div className={styles.form_checkbox_group}>
+          <CustomCheckbox isCompleted={isCompleted} toggle={toggleCompleted} />
+          <p className={styles.form_checkbox_title}>{isCompleted ? 'Сделано' : 'Не сделано'}</p>
+        </div>
+        <button
+          type='submit'
+          disabled={isLoading || !todo}
+          className={styles.form_button}
+        >
+          {
+            isLoading
+              ? <IconLoader size={20} color={'#fff'} />
+              : 'Обновить'
+          }
+        </button>
+      </form>
+      {
+        !!isSubmitError &&
+        <ErrorNotification
+          message={isSubmitError}
+          onClose={handleCloseSubmitErrorNotification}
         />
-      </div>
-      <div className={styles.form_checkbox_group}>
-        <CustomCheckbox isCompleted={isCompleted} toggle={toggleCompleted} />
-        <p className={styles.form_checkbox_title}>{isCompleted ? 'Сделано' : 'Не сделано'}</p>
-      </div>
-      <button
-        type='submit'
-        disabled={isLoading || !todo}
-        className={styles.form_button}
-      >
-        {
-          isLoading
-            ? <IconLoader size={20} color={'#fff'} />
-            : 'Обновить'
-        }
-      </button>
-    </form>
+      }
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useCategories } from '../../../context/categories';
 import { useGetSingleTodoQuery, useUpdateTodoMutation } from '../../../store';
 import { TodoFormValue } from '../../../store/types';
@@ -19,6 +19,8 @@ const TodoUpdateModal: FC<Props> = ({ isOpen, onClose, todoId }) => {
   const { data: todo, isLoading } = useGetSingleTodoQuery({ id: todoId, categoryId });
   const [updateTodo, { isLoading: isUpdateLoading }] = useUpdateTodoMutation();
 
+  const [isUpdateError, setIsUpdateError] = useState<any | null>(null);
+
   const defaultValues = useMemo(() => {
     if (todo) {
       const defaultFormValue: TodoFormValue = {
@@ -37,8 +39,13 @@ const TodoUpdateModal: FC<Props> = ({ isOpen, onClose, todoId }) => {
       await updateTodo(value);
       onClose();
     } catch (error) {
-      return <ErrorNotification message={error} />;
+      setIsUpdateError(error);
+      return;
     }
+  };
+
+  const handleCloseUpdateErrorNotification = () => {
+    setIsUpdateError(null);
   };
 
   return (
@@ -47,6 +54,13 @@ const TodoUpdateModal: FC<Props> = ({ isOpen, onClose, todoId }) => {
         (!isLoading && !!defaultValues)
           ? <TodoForm isLoading={isUpdateLoading} onSubmit={handleSubmit} defaultValues={defaultValues} />
           : <div className={styles.loader_wrapper}><IconLoader size={38} /></div>
+      }
+      {
+        !!isUpdateError &&
+        <ErrorNotification
+          message={isUpdateError}
+          onClose={handleCloseUpdateErrorNotification}
+        />
       }
     </Modal>
   );
